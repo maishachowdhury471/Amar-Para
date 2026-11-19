@@ -1,0 +1,40 @@
+# ===== আমার পাড়া — .gitignore =====
+
+# পরিবেশ ও সিক্রেট
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# আপলোড করা ছবি (ব্যবহারকারীদের পোস্টের ছবি)
+uploads/
+backend/uploads/
+
+# Docker / ডাটাবেস ডেটা
+pgdata/
+
+# এডিটর ও OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db

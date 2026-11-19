@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* বাংলা ফন্ট — Noto Sans Bengali (Google Fonts থেকে, না থাকলে সিস্টেম ফন্ট) */
+body {
+  font-family: 'Noto Sans Bengali', 'Hind Siliguri', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input, select, textarea, button {
+  font-family: inherit;
+}

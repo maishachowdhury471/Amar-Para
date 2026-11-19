@@ -1,0 +1,61 @@
+services:
+  db:
+    image: postgres:16
+    container_name: amarpara-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-amarpara}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-amarpara_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-amar_para}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-amarpara} -d ${POSTGRES_DB:-amar_para}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - amarpara-net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: amarpara-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://amarpara:${POSTGRES_PASSWORD:-amarpara_dev_password}@db:5432/${POSTGRES_DB:-amar_para}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/uploads:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    networks:
+      - amarpara-net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: amarpara-frontend
+    restart: unless-stopped
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - amarpara-net
+
+volumes:
+  pgdata:
+
+networks:
+  amarpara-net:
+    driver: bridge
