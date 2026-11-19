@@ -1,0 +1,5 @@
+# Netlify প্রক্সি: /api/* ব্যাকএন্ডে যায়, বাকি সব SPA-তে যায়।
+# ডিপ্লয়ের সময় __BACKEND_URL__ জায়গায় আসল ব্যাকএন্ড ঠিকানা বসাতে হবে,
+# যেমন https://amar-para-backend.onrender.com (শেষে / নেই)।
+/api/*  __BACKEND_URL__/api/:splat  200
+/*  /index.html  200

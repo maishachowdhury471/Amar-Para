@@ -1,0 +1,35 @@
+# আমার পাড়া — Render Blueprint (ব্যাকএন্ড + PostgreSQL)
+# ব্যবহার: Render ড্যাশবোর্ডে New → Blueprint, রিপোজিটরি maishachowdhury471/Amar-Para বেছে নিন।
+# SECRET_KEY নিজে থেকে তৈরি হবে (generateValue)। CORS_ORIGINS ডিপ্লয়ের পর
+# Netlify সাইটের ঠিকানা দিয়ে বদলাতে হবে।
+services:
+  - type: web
+    name: amar-para-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install --no-cache-dir -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: amar-para-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: http://localhost:4200
+      - key: FRONTEND_URL
+        value: http://localhost:4200
+      - key: SMS_PROVIDER
+        value: log
+      - key: RATE_LIMIT_DEFAULT
+        value: 100/minute
+
+databases:
+  - name: amar-para-db
+    databaseName: amar_para
+    user: amarpara
+    plan: free
